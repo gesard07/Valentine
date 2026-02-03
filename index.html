@@ -4,156 +4,94 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Will you be my Valentine? 💘</title>
+
   <style>
     body{
-      margin:0; min-height:100vh; display:grid; place-items:center;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: radial-gradient(circle at top, #ffe0ec, #fff);
-      color:#222;
+      margin:0;
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(135deg, #ffdee9, #b5fffc);
     }
+
     .card{
-      width:min(560px, 92vw);
-      background:#fff;
-      border:1px solid rgba(0,0,0,.08);
+      background:white;
+      padding:30px;
       border-radius:20px;
-      box-shadow: 0 18px 60px rgba(0,0,0,.12);
-      padding:28px;
+      box-shadow:0 15px 40px rgba(0,0,0,0.2);
       text-align:center;
+      width:320px;
     }
-    h1{ margin:0 0 10px; font-size:28px;}
-    p{ margin:0 0 18px; font-size:16px; opacity:.85;}
-    .btns{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+
+    h1{
+      margin-bottom:10px;
+    }
+
+    p{
+      margin-bottom:20px;
+      color:#555;
+    }
+
     button{
-      border:0; padding:12px 18px; border-radius:999px;
-      font-weight:700; cursor:pointer; font-size:16px;
-      transition: transform .08s ease;
+      padding:12px 20px;
+      font-size:16px;
+      border:none;
+      border-radius:25px;
+      cursor:pointer;
+      margin:5px;
     }
-    button:active{ transform: scale(.98); }
-    #yes{ background:#ff2d6f; color:white; }
-    #no{ background:#f2f2f2; color:#333; position:relative; }
-    .badge{
-      display:inline-block; margin-top:14px; padding:8px 12px; border-radius:999px;
-      background:#fff4f8; border:1px solid rgba(255,45,111,.25);
-      font-weight:600;
+
+    #yes{
+      background:#ff4d6d;
+      color:white;
     }
-    .hidden{ display:none; }
+
+    #no{
+      background:#e0e0e0;
+      position:relative;
+    }
+
+    #message{
+      margin-top:20px;
+      font-weight:bold;
+      color:#ff4d6d;
+      display:none;
+    }
   </style>
 </head>
+
 <body>
   <div class="card">
-    <h1>Will you be my Valentine? 💘</h1>
-    <p>I wrote this page just for you.</p>
+    <h1>Will you be my Valentine? 💖</h1>
+    <p>I coded this just for you</p>
 
-    <div class="btns">
-      <button id="yes">YES 😍</button>
-      <button id="no">no 🙈</button>
-    </div>
+    <button id="yes">YES 💘</button>
+    <button id="no">NO 🙈</button>
 
-    <div id="result" class="badge hidden"></div>
+    <div id="message"></div>
   </div>
 
   <script>
-    // personalize:
-    const girlfriendName = "Kiara"; // change if you want
-    const fromName = "Gesard";      // change if you want
+    const girlfriend = "Kiara"; // change name if you want
+    const from = "Gesard";
 
-    const yes = document.getElementById("yes");
-    const no  = document.getElementById("no");
-    const res = document.getElementById("result");
+    const yesBtn = document.getElementById("yes");
+    const noBtn = document.getElementById("no");
+    const message = document.getElementById("message");
 
-    let dodges = 0;
+    yesBtn.onclick = () => {
+      message.style.display = "block";
+      message.innerHTML = `Yay! Happy Valentine’s ${girlfriend} 💞<br>— ${from}`;
+    };
 
-    yes.addEventListener("click", () => {
-      res.classList.remove("hidden");
-      res.textContent = `YAAAY! 💞 Happy Valentine’s, ${girlfriendName}! — ${fromName}`;
-      confetti();
-      no.disabled = true;
-      yes.textContent = "YES ✅";
-    });
-
-    no.addEventListener("mouseenter", dodge);
-    no.addEventListener("click", dodge);
-
-    function dodge(){
-      dodges++;
-      const maxX = 220, maxY = 140;
-      const x = (Math.random()*2-1) * Math.min(maxX, 60 + dodges*20);
-      const y = (Math.random()*2-1) * Math.min(maxY, 40 + dodges*15);
-      no.style.transform = `translate(${x}px, ${y}px)`;
-      if(dodges >= 6){
-        no.textContent = "ok YES 😅";
-        no.style.transform = "";
-        no.disabled = true;
-        yes.click();
-      }
-    }
-
-    // tiny confetti (no libraries)
-    function confetti(){
-      const colors = ["#ff2d6f","#ffcc00","#00c2ff","#7c4dff","#00d084"];
-      for(let i=0;i<120;i++){
-        const s = document.createElement("span");
-        s.style.position="fixed";
-        s.style.left=(Math.random()*100)+"vw";
-        s.style.top="-10px";
-        s.style.width="8px";
-        s.style.height="14px";
-        s.style.background=colors[i%colors.length];
-        s.style.opacity="0.9";
-        s.style.borderRadius="2px";
-        s.style.transform=`rotate(${Math.random()*360}deg)`;
-        s.style.zIndex="9999";
-        document.body.appendChild(s);
-
-        const fall = 1200 + Math.random()*1200;
-        const drift = (Math.random()*2-1) * 200;
-
-        s.animate([
-          { transform: s.style.transform + " translate(0,0)" },
-          { transform: s.style.transform + ` translate(${drift}px, 110vh)` }
-        ], { duration: fall, easing: "cubic-bezier(.2,.7,.2,1)" });
-
-        setTimeout(()=>s.remove(), fall+100);
-      }
-    }
+    noBtn.onmouseover = () => {
+      const x = Math.random() * 200 - 100;
+      const y = Math.random() * 200 - 100;
+      noBtn.style.transform = `translate(${x}px, ${y}px)`;
+    };
   </script>
-<!-- Code injected by live-server -->
-<script>
-	// <![CDATA[  <-- For SVG support
-	if ('WebSocket' in window) {
-		(function () {
-			function refreshCSS() {
-				var sheets = [].slice.call(document.getElementsByTagName("link"));
-				var head = document.getElementsByTagName("head")[0];
-				for (var i = 0; i < sheets.length; ++i) {
-					var elem = sheets[i];
-					var parent = elem.parentElement || head;
-					parent.removeChild(elem);
-					var rel = elem.rel;
-					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
-						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
-						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
-					}
-					parent.appendChild(elem);
-				}
-			}
-			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
-			var address = protocol + window.location.host + window.location.pathname + '/ws';
-			var socket = new WebSocket(address);
-			socket.onmessage = function (msg) {
-				if (msg.data == 'reload') window.location.reload();
-				else if (msg.data == 'refreshcss') refreshCSS();
-			};
-			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
-				console.log('Live reload enabled.');
-				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
-			}
-		})();
-	}
-	else {
-		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
-	}
-	// ]]>
-</script>
 </body>
 </html>
+
